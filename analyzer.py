@@ -162,22 +162,40 @@ def _extract_segment(df: pd.DataFrame, tratto: Tratto) -> pd.DataFrame:
         int(gps.loc[group, "_dist_end"].idxmin()) for group in end_groups
     )
 
-    # Un segmento per passaggio START. L'END deve essere prima dello START
-    # successivo, così ogni lap rimane indipendente dagli altri.
-    segments = []
-    for pos, start_idx in enumerate(start_candidates):
-        next_start = start_candidates[pos + 1] if pos + 1 < len(start_candidates) else None
-        compatible_ends = [
-            end_idx for end_idx in end_candidates
-            if end_idx > start_idx and (next_start is None or end_idx < next_start)
+    # Caso circuito chiuso: START e END coincidono (o sono entro la tolleranza GPS).
+    # In questo caso l'END di un lap E' lo START del lap successivo.
+    # Quindi i segmenti corretti sono: passaggio 1->2, 2->3, 3->4, ecc.
+    same_gate = (
+        abs(float(tratto.lat_start) - float(tratto.lat_end)) <= max(1, int(tratto.gps_tolerance))
+        and abs(float(tratto.long_start) - float(tratto.long_end)) <= max(1, int(tratto.gps_tolerance))
+    )
+
+    if same_gate:
+        # Per START == END le due liste descrivono lo stesso punto di passaggio.
+        # Usiamo i candidati START ordinati temporalmente e colleghiamo passaggi consecutivi.
+        passes = sorted(start_candidates)
+        segments = [
+            (passes[i], passes[i + 1])
+            for i in range(len(passes) - 1)
+            if passes[i + 1] > passes[i]
         ]
-        if not compatible_ends:
-            continue
-        end_idx = min(
-            compatible_ends,
-            key=lambda idx: (float(gps.loc[idx, "_dist_end"]), idx - start_idx),
-        )
-        segments.append((start_idx, end_idx))
+    else:
+        # Tratto normale in linea: l'END deve appartenere allo stesso passaggio
+        # e quindi essere prima dello START successivo.
+        segments = []
+        for pos, start_idx in enumerate(start_candidates):
+            next_start = start_candidates[pos + 1] if pos + 1 < len(start_candidates) else None
+            compatible_ends = [
+                end_idx for end_idx in end_candidates
+                if end_idx > start_idx and (next_start is None or end_idx < next_start)
+            ]
+            if not compatible_ends:
+                continue
+            end_idx = min(
+                compatible_ends,
+                key=lambda idx: (float(gps.loc[idx, "_dist_end"]), idx - start_idx),
+            )
+            segments.append((start_idx, end_idx))
 
     segments.sort(key=lambda x: x[0])
     requested = max(1, int(getattr(tratto, "passaggio", 1)))
@@ -328,6 +346,7 @@ def points_in_tratto(
         route_df,
         tratto
     ).reset_index(drop=True)
+
 
 
 
