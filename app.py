@@ -27,7 +27,7 @@ from analyzer import (
 )
 import storage
 
-st.set_page_config(page_title="FIT Analyzer V2 X Fiandre - Tesi Gaia", page_icon="🚴", layout="wide")
+st.set_page_config(page_title="FIT Analyzer - Tesi Gaia", page_icon="🚴", layout="wide")
 
 # ────────────────────────── MANUTENZIONE PROGRAMMATA ──────────────────────────
 # L'app resta offline fino a questo istante (Europe/Rome), poi si riattiva da sola.
@@ -736,4 +736,5 @@ with st.expander("📖 Guida di utilizzo (clicca per aprire)", expanded=False):
             st.markdown(f.read())
     except FileNotFoundError:
         st.info("Guida non trovata (file guida.md).")
+
 
