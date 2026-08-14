@@ -171,9 +171,72 @@ def _extract_segment(df: pd.DataFrame, tratto: Tratto) -> pd.DataFrame:
     )
 
     if same_gate:
-        # Per START == END le due liste descrivono lo stesso punto di passaggio.
-        # Usiamo i candidati START ordinati temporalmente e colleghiamo passaggi consecutivi.
-        passes = sorted(start_candidates)
+        # Circuito chiuso (START == END).
+        #
+        # ATTENZIONE: durante un giro la traccia può passare di nuovo molto vicino
+        # alla coordinata di start/finish (es. incrocio, cavalcavia, strada parallela).
+        # Se prendessimo semplicemente due candidati consecutivi, quel passaggio
+        # "vicino" verrebbe scambiato per il traguardo e taglierebbe il giro.
+        #
+        # Strategia robusta:
+        #   1) i primi due attraversamenti validi definiscono il primo lap;
+        #   2) la durata di quel lap diventa il riferimento temporale;
+        #   3) per i lap successivi NON prendiamo il primo punto vicino, ma il
+        #      candidato temporalmente più coerente con la durata del lap precedente;
+        #   4) scartiamo automaticamente i falsi attraversamenti troppo anticipati.
+        raw_passes = sorted(start_candidates)
+
+        if len(raw_passes) < 2:
+            return df.iloc[0:0].copy()
+
+        # I primi due candidati sono quelli che già definiscono correttamente Q1.
+        passes = [raw_passes[0], raw_passes[1]]
+
+        def _elapsed_s(a: int, b: int) -> float:
+            try:
+                ta = pd.Timestamp(df.loc[a, "timestamp"])
+                tb = pd.Timestamp(df.loc[b, "timestamp"])
+                sec = float((tb - ta).total_seconds())
+                if np.isfinite(sec) and sec > 0:
+                    return sec
+            except Exception:
+                pass
+            return float(b - a)
+
+        lap_durations = [_elapsed_s(passes[0], passes[1])]
+
+        # Costruiamo i passaggi successivi scegliendo il candidato che cade
+        # vicino al momento atteso del giro seguente. Un passaggio interno allo
+        # stesso lap, anche se geometricamente vicinissimo allo start, viene così
+        # ignorato.
+        remaining = [p for p in raw_passes if p > passes[-1]]
+        while remaining:
+            prev = passes[-1]
+            ref_lap_s = float(np.median(lap_durations[-3:]))
+
+            # Non può essere un nuovo giro se arriva troppo presto.
+            # 55% lascia margine a variazioni di velocità ma elimina gli incroci
+            # interni che si trovano nello stesso giro.
+            min_next_s = max(120.0, ref_lap_s * 0.55)
+            # Limite molto permissivo: evita soltanto associazioni assurde.
+            max_next_s = ref_lap_s * 1.80
+
+            plausible = []
+            for cand in remaining:
+                dt = _elapsed_s(prev, cand)
+                if min_next_s <= dt <= max_next_s:
+                    plausible.append((abs(dt - ref_lap_s), cand, dt))
+
+            if not plausible:
+                break
+
+            # Il vero passaggio successivo è quello più coerente con la cadenza
+            # temporale del circuito, non necessariamente il primo GPS vicino.
+            _, nxt, dt = min(plausible, key=lambda x: (x[0], x[1]))
+            passes.append(int(nxt))
+            lap_durations.append(float(dt))
+            remaining = [p for p in remaining if p > nxt]
+
         segments = [
             (passes[i], passes[i + 1])
             for i in range(len(passes) - 1)
@@ -346,6 +409,7 @@ def points_in_tratto(
         route_df,
         tratto
     ).reset_index(drop=True)
+
 
 
 
