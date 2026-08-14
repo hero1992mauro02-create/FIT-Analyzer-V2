@@ -26,6 +26,7 @@ class Tratto:
     long_start: float
     long_end: float
     gps_tolerance: int = 100  # semicircles
+    passaggio: int = 1  # 1=primo passaggio, 2=secondo, ecc. per circuiti/lap
 
 
 SEMI_PER_DEG = 2**31 / 180.0
@@ -115,104 +116,75 @@ def _extract_segment(df: pd.DataFrame, tratto: Tratto) -> pd.DataFrame:
     """
     Estrae il tratto START → END seguendo l'ordine reale del file FIT.
 
-    Individua passaggi distinti vicino alle coordinate START e END,
-    evitando che più campioni consecutivi dello stesso passaggio vengano
-    interpretati come passaggi differenti.
+    Nei circuiti, se più tratti hanno le stesse coordinate, ``passaggio``
+    permette di selezionare 1°, 2°, 3°, 4° attraversamento della stessa
+    coppia START/END senza sovrapporli temporalmente.
     """
-
     gps = df.dropna(subset=["position_lat", "position_long"]).copy()
-
     if gps.empty:
         return df.iloc[0:0].copy()
 
-    # Distanza di ogni record dallo START
     gps["_dist_start"] = (
         (gps["position_lat"].astype(float) - float(tratto.lat_start)) ** 2
         + (gps["position_long"].astype(float) - float(tratto.long_start)) ** 2
     )
-
-    # Distanza di ogni record dall'END
     gps["_dist_end"] = (
         (gps["position_lat"].astype(float) - float(tratto.lat_end)) ** 2
         + (gps["position_long"].astype(float) - float(tratto.long_end)) ** 2
     )
 
-    # Trova molti candidati iniziali
-    raw_start = gps.nsmallest(200, "_dist_start").index.tolist()
-    raw_end = gps.nsmallest(200, "_dist_end").index.tolist()
+    # Usiamo solo circa l'1% dei punti GPS più vicini alla coordinata.
+    # È abbastanza per prendere più campioni dello stesso attraversamento,
+    # ma non così tanto da collegare porzioni lontane del circuito.
+    n_near = min(200, max(20, int(round(len(gps) * 0.01))))
+    raw_start = gps.nsmallest(n_near, "_dist_start").index.tolist()
+    raw_end = gps.nsmallest(n_near, "_dist_end").index.tolist()
 
-    def distinct_passes(indices, min_gap=60):
-        """
-        Raggruppa punti vicini temporalmente come un unico passaggio.
-        min_gap=60 significa che due passaggi devono essere separati
-        da almeno 60 record (~60 secondi a 1 Hz).
-        """
+    def distinct_passes(indices, min_gap=30):
         if not indices:
             return []
-
-        indices = sorted(indices)
-
+        indices = sorted(int(i) for i in indices)
         groups = [[indices[0]]]
-
         for idx in indices[1:]:
             if idx - groups[-1][-1] <= min_gap:
                 groups[-1].append(idx)
             else:
                 groups.append([idx])
-
         return groups
 
     start_groups = distinct_passes(raw_start)
     end_groups = distinct_passes(raw_end)
 
-    # Per ogni passaggio START prendiamo il punto realmente più vicino
-    start_candidates = []
+    start_candidates = sorted(
+        int(gps.loc[group, "_dist_start"].idxmin()) for group in start_groups
+    )
+    end_candidates = sorted(
+        int(gps.loc[group, "_dist_end"].idxmin()) for group in end_groups
+    )
 
-    for group in start_groups:
-        best_idx = gps.loc[group, "_dist_start"].idxmin()
-        start_candidates.append(int(best_idx))
+    # Un segmento per passaggio START. L'END deve essere prima dello START
+    # successivo, così ogni lap rimane indipendente dagli altri.
+    segments = []
+    for pos, start_idx in enumerate(start_candidates):
+        next_start = start_candidates[pos + 1] if pos + 1 < len(start_candidates) else None
+        compatible_ends = [
+            end_idx for end_idx in end_candidates
+            if end_idx > start_idx and (next_start is None or end_idx < next_start)
+        ]
+        if not compatible_ends:
+            continue
+        end_idx = min(
+            compatible_ends,
+            key=lambda idx: (float(gps.loc[idx, "_dist_end"]), idx - start_idx),
+        )
+        segments.append((start_idx, end_idx))
 
-    # Per ogni passaggio END prendiamo il punto realmente più vicino
-    end_candidates = []
-
-    for group in end_groups:
-        best_idx = gps.loc[group, "_dist_end"].idxmin()
-        end_candidates.append(int(best_idx))
-
-    best = None
-
-    for start_idx in start_candidates:
-        for end_idx in end_candidates:
-
-            # END deve essere dopo START
-            if end_idx <= start_idx:
-                continue
-
-            start_error = float(gps.loc[start_idx, "_dist_start"])
-            end_error = float(gps.loc[end_idx, "_dist_end"])
-
-            gps_score = start_error + end_error
-
-            # A parità di precisione GPS preferiamo il tratto temporalmente più corto.
-            # Questo evita di prendere un giro enorme della corsa quando START e END
-            # sono vicini ma il percorso torna più volte nella stessa zona.
-            duration_samples = end_idx - start_idx
-
-            candidate = (
-                gps_score,
-                duration_samples,
-                start_idx,
-                end_idx,
-            )
-
-            if best is None or candidate < best:
-                best = candidate
-
-    if best is None:
+    segments.sort(key=lambda x: x[0])
+    requested = max(1, int(getattr(tratto, "passaggio", 1)))
+    if requested > len(segments):
         return df.iloc[0:0].copy()
 
-    _, _, start_idx, end_idx = best
-
+    start_idx, end_idx = segments[requested - 1]
     return df.loc[start_idx:end_idx].copy()
 
 
@@ -356,3 +328,4 @@ def points_in_tratto(
         route_df,
         tratto
     ).reset_index(drop=True)
+
