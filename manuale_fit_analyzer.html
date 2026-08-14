@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>FIT Analyzer — Manuale di formazione</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  @page {
+    size: A4;
+    margin: 2.2cm 2cm 2.5cm 2cm;
+    background: #0a0a0f;
+    @top-left { content: "FIT.Analyzer · Manuale"; font-family: 'JetBrains Mono', monospace; font-size: 8.5pt; color: #6b6b7a; }
+    @top-right { content: "v. 1.0 / 2026"; font-family: 'JetBrains Mono', monospace; font-size: 8.5pt; color: #6b6b7a; }
+    @bottom-center { content: counter(page) " / " counter(pages); font-family: 'JetBrains Mono', monospace; font-size: 9pt; color: #d4ff3a; }
+  }
+  @page :first {
+    margin: 0;
+    @top-left { content: ""; }
+    @top-right { content: ""; }
+    @bottom-center { content: ""; }
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #0a0a0f; color: #f5f5f7; font-family: 'Inter', sans-serif; font-size: 10.5pt; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; font-weight: 600; letter-spacing: -0.02em; line-height: 1.1; color: #f5f5f7; }
+  h1 { font-size: 30pt; margin-bottom: 1rem; font-weight: 700; }
+  h2 { font-size: 22pt; margin-top: 2.5rem; margin-bottom: 1rem; page-break-after: avoid; font-weight: 700; }
+  h3 { font-size: 14pt; margin-top: 1.5rem; margin-bottom: 0.6rem; page-break-after: avoid; font-weight: 600; }
+  h3 .accent { color: #d4ff3a; }
+  h4 { font-size: 10pt; margin-top: 1rem; margin-bottom: 0.4rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #a0a0b0; font-family: 'JetBrains Mono', monospace; }
+  p { margin-bottom: 0.85rem; color: #d0d0d8; }
+  a { color: #d4ff3a; text-decoration: none; }
+  code { font-family: 'JetBrains Mono', monospace; font-size: 9pt; background: #1a1a24; padding: 1px 6px; border-radius: 3px; color: #d4ff3a; border: 1px solid rgba(212, 255, 58, 0.15); }
+  pre { background: #12121a; padding: 1rem 1.25rem; border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 9pt; overflow: hidden; white-space: pre-wrap; margin: 0.8rem 0; border-left: 3px solid #d4ff3a; color: #d4ff3a; }
+  ul, ol { margin: 0.6rem 0 0.8rem 1.4rem; color: #d0d0d8; }
+  li { margin-bottom: 0.35rem; }
+  strong { color: #f5f5f7; font-weight: 600; }
+  em { font-style: italic; color: #a0a0b0; }
+
+  /* COVER */
+  .cover { page-break-after: always; background: #0a0a0f; color: #f5f5f7; height: 100vh; padding: 3.5cm 2.5cm 2cm 2.5cm; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; }
+  .cover::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: #d4ff3a; box-shadow: 0 0 30px rgba(212, 255, 58, 0.6); }
+  .cover::after { content: ""; position: absolute; bottom: -30%; right: -20%; width: 60%; height: 60%; background: radial-gradient(circle, rgba(212, 255, 58, 0.15), transparent 60%); pointer-events: none; }
+  .cover .top { position: relative; z-index: 1; }
+  .cover .brand { font-family: 'Space Grotesk', sans-serif; font-size: 14pt; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 4rem; }
+  .cover .brand span { color: #d4ff3a; }
+  .cover .eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 9pt; color: #d4ff3a; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 1.5rem; display: inline-block; padding: 0.35rem 0.9rem; background: rgba(212, 255, 58, 0.08); border: 1px solid rgba(212, 255, 58, 0.3); border-radius: 100px; }
+  .cover h1 { color: #f5f5f7; font-size: 44pt; line-height: 1.05; margin-bottom: 2rem; max-width: 95%; font-weight: 700; letter-spacing: -0.03em; }
+  .cover h1 .highlight { color: #d4ff3a; font-style: italic; }
+  .cover .subtitle { font-size: 12pt; color: #a0a0b0; line-height: 1.5; max-width: 85%; }
+  .cover .bottom { display: flex; justify-content: space-between; align-items: flex-end; font-family: 'JetBrains Mono', monospace; font-size: 9pt; color: #6b6b7a; position: relative; z-index: 1; }
+  .cover .bottom .version { text-align: right; }
+  .cover .bottom .version strong { color: #d4ff3a; }
+
+  /* TOC */
+  .toc { page-break-after: always; padding-top: 1rem; }
+  .toc h2 { margin-top: 0; }
+  .toc .eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 9pt; color: #d4ff3a; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 1rem; }
+  .toc ol { list-style: none; margin: 2rem 0 0 0; counter-reset: toc; }
+  .toc ol li { counter-increment: toc; padding: 0.65rem 0; border-bottom: 1px solid rgba(255, 255, 255, 0.08); display: flex; justify-content: space-between; align-items: baseline; }
+  .toc ol li::before { content: counter(toc, decimal-leading-zero) " → "; color: #d4ff3a; font-family: 'JetBrains Mono', monospace; font-size: 9pt; font-weight: 600; margin-right: 0.9rem; }
+  .toc ol li .chapter-title { flex: 1; font-family: 'Space Grotesk', sans-serif; font-size: 12pt; font-weight: 500; color: #f5f5f7; }
+  .toc ol li .page-num { font-family: 'JetBrains Mono', monospace; font-size: 9pt; color: #6b6b7a; }
+
+  /* CHAPTERS */
+  .chapter { page-break-before: always; }
+  .chapter-header { border-bottom: 1px solid rgba(212, 255, 58, 0.3); padding-bottom: 1.2rem; margin-bottom: 2rem; }
+  .chapter-header .chapter-num { font-family: 'JetBrains Mono', monospace; font-size: 9pt; color: #d4ff3a; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 0.5rem; }
+  .chapter-header h2 { margin: 0; font-size: 30pt; letter-spacing: -0.03em; }
+  .chapter-intro { font-size: 12pt; color: #a0a0b0; margin-bottom: 2rem; max-width: 90%; font-family: 'Space Grotesk', sans-serif; font-weight: 400; line-height: 1.45; }
+
+  /* CALLOUT */
+  .callout { background: #12121a; border: 1px solid rgba(212, 255, 58, 0.25); border-left: 3px solid #d4ff3a; padding: 1.1rem 1.35rem; margin: 1.2rem 0; border-radius: 0 6px 6px 0; }
+  .callout .callout-label { font-family: 'JetBrains Mono', monospace; font-size: 8.5pt; text-transform: uppercase; letter-spacing: 0.1em; color: #d4ff3a; font-weight: 600; margin-bottom: 0.5rem; }
+  .callout p { color: #d0d0d8; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout.info { border: 1px solid rgba(77, 124, 255, 0.25); border-left: 3px solid #4d7cff; }
+  .callout.info .callout-label { color: #4d7cff; }
+  .callout.warning { border: 1px solid rgba(255, 61, 90, 0.25); border-left: 3px solid #ff3d5a; }
+  .callout.warning .callout-label { color: #ff3d5a; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; margin: 1.2rem 0; font-size: 10pt; background: #12121a; border-radius: 6px; overflow: hidden; }
+  th, td { text-align: left; padding: 0.65rem 0.85rem; border-bottom: 1px solid rgba(255, 255, 255, 0.08); color: #d0d0d8; }
+  th { background: #1a1a24; font-weight: 600; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; font-size: 8pt; letter-spacing: 0.08em; color: #d4ff3a; border-bottom: 1px solid rgba(212, 255, 58, 0.2); }
+  td.mono { font-family: 'JetBrains Mono', monospace; font-size: 9pt; color: #d4ff3a; }
+  .delta-plus { color: #d4ff3a; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+
+  /* STEP GRID */
+  .step-block { background: #12121a; border: 1px solid rgba(255, 255, 255, 0.08); padding: 1.4rem; margin: 0.65rem 0; border-radius: 8px; page-break-inside: avoid; }
+  .step-block .step-num { font-family: 'JetBrains Mono', monospace; font-size: 8.5pt; color: #d4ff3a; font-weight: 600; margin-bottom: 0.6rem; text-transform: uppercase; letter-spacing: 0.08em; }
+  .step-block h4 { margin-top: 0; color: #f5f5f7; font-family: 'Space Grotesk', sans-serif; text-transform: none; letter-spacing: normal; font-size: 12pt; }
+
+  /* SECTION LEAD */
+  .lead { font-size: 12pt; line-height: 1.55; color: #d0d0d8; margin-bottom: 1.5rem; }
+
+  /* FIGURE */
+  .figure { background: #12121a; border: 1px dashed rgba(212, 255, 58, 0.4); border-radius: 8px; padding: 1.2rem; margin: 1.2rem 0; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 9pt; color: #6b6b7a; page-break-inside: avoid; }
+  .figure .caption { margin-top: 0.6rem; font-family: 'Inter', sans-serif; font-size: 9pt; color: #a0a0b0; font-style: italic; }
+
+  /* BIBLIO */
+  .biblio ol { list-style: decimal; margin-left: 1.5rem; color: #d0d0d8; }
+  .biblio li { padding: 0.55rem 0; font-size: 9.5pt; line-height: 1.5; }
+
+  .no-break { page-break-inside: avoid; }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<section class="cover">
+  <div class="top">
+    <div class="brand">FIT<span>.</span>Analyzer</div>
+    <div class="eyebrow">→ Manuale di formazione</div>
+    <h1>Analisi comparate di file .fit per la <span class="highlight">ricerca sport science</span>.</h1>
+    <p class="subtitle">Guida completa all'uso del tool, ai fondamenti scientifici del metodo Coggan/Allen e ai protocolli di analisi per tesi e gruppi di ricerca sul ciclismo su strada.</p>
+  </div>
+  <div class="bottom">
+    <div>2026 · Manuale interno</div>
+    <div class="version"><strong>v. 1.0</strong><br>Edizione italiana</div>
+  </div>
+</section>
+
+<!-- TOC -->
+<section class="toc">
+  <div class="eyebrow">→ Indice</div>
+  <h2>Cosa trovi in questo manuale.</h2>
+  <ol>
+    <li><span class="chapter-title">Introduzione</span></li>
+    <li><span class="chapter-title">Fondamenti scientifici</span></li>
+    <li><span class="chapter-title">Primo accesso e configurazione</span></li>
+    <li><span class="chapter-title">Definire una gara e i tratti GPS</span></li>
+    <li><span class="chapter-title">Upload e analisi dei file .fit</span></li>
+    <li><span class="chapter-title">La mappa GPS per la verifica delle coordinate</span></li>
+    <li><span class="chapter-title">Lettura dei risultati e dei grafici</span></li>
+    <li><span class="chapter-title">Archivio persistente e cronologia</span></li>
+    <li><span class="chapter-title">Interpretazione fisiologica dei risultati</span></li>
+    <li><span class="chapter-title">Protocollo di analisi per una tesi</span></li>
+    <li><span class="chapter-title">Troubleshooting e FAQ tecniche</span></li>
+    <li><span class="chapter-title">Bibliografia</span></li>
+  </ol>
+</section>
+
+<!-- CHAPTER 1 -->
+<section class="chapter">
+  <div class="chapter-header">
+    <div class="chapter-num">Capitolo 01</div>
+    <h2>Introduzione</h2>
+  </div>
+  <p class="chapter-intro">Cos'è FIT Analyzer, a chi serve, e perché è stato costruito per la ricerca prima che per l'allenamento personale.</p>
+
+  <h3>Cos'è FIT Analyzer</h3>
+  <p class="lead">FIT Analyzer è un web tool italiano che legge i file <code>.fit</code> generati dai power meter dei ciclisti e restituisce, in trenta secondi, l'analisi comparata di tutte le soglie W/kg per tutti i tratti geografici di una o più gare.</p>
+
+  <p>Il tool nasce da un'esigenza concreta: analizzare in modo sistematico e riproducibile i dati di potenza dei corridori pro sulle cinque classiche monumento (Milano-Sanremo, Giro delle Fiandre, Parigi-Roubaix, Liegi-Bastogne-Liegi, Giro di Lombardia) per una tesi di laurea magistrale in Scienze Motorie. Da lì si è evoluto in uno strumento pensato per <strong>chiunque debba fare analisi comparate su file .fit</strong>: studenti in tesi, dottorandi, gruppi di ricerca, preparatori atletici di squadre semi-pro o amateur elite.</p>
+
+  <h3>A chi serve (e a chi non serve)</h3>
+  <p><strong>Serve a te se:</strong></p>
+  <ul>
+    <li>Stai facendo una tesi sperimentale su ciclismo su strada e devi analizzare più corridori sulle stesse gare o sugli stessi tratti.</li>
+    <li>Sei un ricercatore in sport science e ti serve un tool riproducibile per calcolare tempo-in-zona su file .fit.</li>
+    <li>Sei un preparatore atletico e vuoi confrontare i tuoi atleti su un tratto specifico (una salita, un tratto di gara).</li>
+    <li>Hai bisogno di un output tabellare pronto da esportare in Excel per statistica descrittiva.</li>
+  </ul>
+
+  <p><strong>Non serve a te se:</strong></p>
+  <ul>
+    <li>Vuoi analizzare il tuo singolo allenamento personale — per quello Golden Cheetah, WKO5 o TrainingPeaks sono già molto potenti e su singolo utente sono spesso gratuiti o low-cost.</li>
+    <li>Cerchi metriche di training load complesse (TSS, IF, CTL, ATL) — il tool si concentra volutamente sulle metriche tempo-in-zona per l'analisi di gara, non sulla pianificazione dell'allenamento.</li>
+    <li>Vuoi visualizzazioni 3D del percorso — la mappa integrata è funzionale alla verifica dei tratti, non all'esplorazione visiva ricca.</li>
+  </ul>
+
+  <h3>Cosa lo differenzia</h3>
+  <p>Sul mercato esistono ottimi software di analisi ciclistica su file .fit. Nessuno di questi, però, è pensato per <strong>l'analisi comparata di più corridori sugli stessi tratti GPS di una gara pubblica</strong> con export tabellare pronto per statistica descrittiva. FIT Analyzer è nato lì: nella terra di mezzo tra l'analisi individuale (dove Golden Cheetah eccelle) e la piattaforma di training (dove TrainingPeaks eccelle). È il tool giusto quando devi rispondere a domande come <em>«quanti secondi ha passato Pogačar sopra le 5 W/kg nel finale del Fiandre 2023, e come si confronta con Van der Poel?»</em></p>
+
+  <div class="callout info">
+    <div class="callout-label">Contesto scientifico</div>
+    <p>Le metriche calcolate seguono la convenzione <strong>count-of-samples × 1 sec</strong> di Allen &amp; Coggan (2019), standard adottato da Golden Cheetah, WKO5, TrainingPeaks, Xert, Strava e Garmin Connect. Il capitolo 2 approfondisce i fondamenti scientifici del metodo.</p>
+  </div>
+</section>
+
+<!-- CHAPTER 2 -->
+<section class="chapter">
+  <div class="chapter-header">
+    <div class="chapter-num">Capitolo 02</div>
+    <h2>Fondamenti scientifici</h2>
+  </div>
+  <p class="chapter-intro">Cosa significa "tempo sopra soglia W/kg", perché lo calcoliamo così, e come citarlo nel capitolo Materiali e Metodi della tesi.</p>
+
+  <h3>Potenza normalizzata al peso: W/kg</h3>
+  <p>La potenza espressa in watt (W) è la misura primaria fornita da un power meter. Per confrontare corridori di taglia diversa (un Van der Poel da 75 kg e un Pogačar da 66 kg) si normalizza la potenza per il peso corporeo, ottenendo <strong>W/kg</strong>. Questa metrica è centrale nella letteratura del ciclismo su potenza perché correla direttamente con la capacità aerobica specifica e con la performance in salita.</p>
+
+  <h3>Soglie di riferimento</h3>
+  <p>Le soglie W/kg utilizzate nel tool coprono l'intero spettro fisiologicamente rilevante nel professionismo maschile su strada, tipicamente da <strong>3.5 W/kg</strong> (endurance sostenuto) fino a <strong>8.0 W/kg</strong> (sforzi brevi sopra-soglia). Le soglie sono personalizzabili: puoi definire un range custom con step arbitrario, o inserire manualmente un elenco di valori.</p>
+
+  <table>
+    <thead>
+      <tr><th>Zona (Allen &amp; Coggan)</th><th>% FTP</th><th>W/kg tipico pro</th><th>Interpretazione fisiologica</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Z1 · Active Recovery</td><td>&lt; 55%</td><td>&lt; 2.5</td><td>Recupero attivo</td></tr>
+      <tr><td>Z2 · Endurance</td><td>56-75%</td><td>2.5-3.5</td><td>Base aerobica</td></tr>
+      <tr><td>Z3 · Tempo</td><td>76-90%</td><td>3.5-4.5</td><td>Andatura sostenuta</td></tr>
+      <tr><td>Z4 · Threshold</td><td>91-105%</td><td>4.5-5.5</td><td>Soglia lattacida</td></tr>
+      <tr><td>Z5 · VO₂max</td><td>106-120%</td><td>5.5-7.0</td><td>Massimo consumo O₂</td></tr>
+      <tr><td>Z6 · Anaerobic</td><td>121-150%</td><td>7.0-9.0</td><td>Capacità anaerobica</td></tr>
+      <tr><td>Z7 · Neuromuscular</td><td>&gt; 150%</td><td>&gt; 9.0</td><td>Sprint / esplosività</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Il metodo count-of-samples</h3>
+  <p>Un file .fit standard campiona la potenza istantanea <strong>una volta al secondo</strong>. Ogni riga del file rappresenta quindi 1 secondo di attività. Il metodo count-of-samples consiste in: contare il numero di campioni consecutivi in cui la potenza (mediata su una finestra mobile di N secondi, tipicamente 3-30) supera la soglia scelta, e moltiplicare per la durata del singolo campione.</p>
+
+  <pre>secondi_sopra_soglia = count(sample : power_rolling &gt; soglia) × 1 sec</pre>
+
+  <p>Questa è la convenzione di Allen &amp; Coggan, adottata da tutti i software professionali del settore. È la formula corretta perché ogni campione registrato dal power meter rappresenta un secondo reale di attività: se il power meter ha registrato un valore, per quel secondo il corridore è stato attivo, e quel secondo va contato.</p>
+
+  <div class="callout warning">
+    <div class="callout-label">Attenzione: media mobile</div>
+    <p>Il valore di potenza rispetto al quale si confronta la soglia <strong>non è la potenza istantanea grezza</strong>, ma la potenza mediata su una finestra mobile (default 3 secondi). Questo elimina spike di 1-2 secondi dovuti a errori strumentali o accelerazioni improvvise, restituendo una lettura fisiologicamente più significativa. La lunghezza della finestra è configurabile.</p>
+  </div>
+
+  <h3>Filtro di durata minima (opzionale)</h3>
+  <p>Il tool permette di filtrare i "superamenti" di soglia mantenendo solo quelli che durano almeno N secondi consecutivi. Il default è 0 (nessun filtro). Alzando questa soglia (es. 3-5 secondi) puoi eliminare micro-superamenti non fisiologicamente rilevanti e mantenere solo gli sforzi sostenuti. Utile quando si vuole contare il numero di "attacchi" veri e propri, non ogni singola oscillazione.</p>
+</section>
+
+<!-- CHAPTER 3 -->
+<section class="chapter">
+  <div class="chapter-header">
+    <div class="chapter-num">Capitolo 03</div>
+    <h2>Primo accesso e configurazione</h2>
+  </div>
+  <p class="chapter-intro">Come accedere all'app e impostare i parametri globali della sessione di analisi.</p>
+
+  <h3>Login</h3>
+  <p>L'app è disponibile all'indirizzo <code>https://gaia-fit.streamlit.app</code>. All'apertura è richiesto il login con username e password che ti sono stati forniti al momento dell'acquisto del pacchetto. Se hai smarrito le credenziali scrivi all'indirizzo di supporto e ti verranno rigenerate.</p>
+
+  <h3>La sidebar dei parametri</h3>
+  <p>Una volta autenticato, sulla sinistra trovi la sidebar con i parametri globali della sessione. Questi valori si applicano a tutte le analisi che lanci finché non li modifichi.</p>
+
+  <div class="step-block">
+    <div class="step-num">Parametro 01</div>
+    <h4>Peso corridore (kg)</h4>
+    <p>Il peso di riferimento usato per calcolare i W/kg. Default 72 kg. <strong>Attenzione</strong>: questo valore si applica a tutti i corridori caricati. Se stai analizzando corridori di peso molto diverso, l'ideale è fare più sessioni di analisi separate con il peso corretto per ciascuno, oppure applicare la correzione a posteriori sui dati esportati.</p>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num">Parametro 02</div>
+    <h4>Media mobile (secondi)</h4>
+    <p>La finestra su cui viene mediata la potenza prima del confronto con la soglia. Default 3 secondi (standard di riferimento). Alzando a 30 secondi si ottiene una lettura più smussata utile per identificare sforzi prolungati; abbassando a 1 secondo si contano tutti i picchi istantanei.</p>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num">Parametro 03</div>
+    <h4>Durata minima superamento (secondi)</h4>
+    <p>Filtro opzionale che scarta i superamenti di soglia di durata inferiore a N secondi. Default 0 (nessun filtro). Vedi il capitolo 2 per il dettaglio metodologico.</p>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num">Parametro 04</div>
+    <h4>Soglie W/kg</h4>
+    <p>Due modalità: <strong>range</strong> (definisci min, max, step — es. 3.5 → 8.0 con step 0.5) oppure <strong>custom</strong> (elenco separato da virgola). La lista attiva viene mostrata subito sotto.</p>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num">Parametro 05</div>
+    <h4>Formato coordinate</h4>
+    <p>Le coordinate GPS dei tratti possono essere inserite in <strong>gradi decimali</strong> (es. 45.678900) — formato standard di Google Maps e più leggibile — oppure in <strong>semicircles</strong>, il formato nativo dei file .fit. Il tool converte internamente. Se stai copiando coordinate da Google Maps o da un GPS grand pubblico, usa gradi decimali.</p>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num">Parametro 06</div>
+    <h4>Tolleranza GPS (semicircles)</h4>
+    <p>Definisce l'ampiezza del "bounding box" attorno alle coordinate del tratto. Un valore più alto aggancia più record del .fit; un valore più basso è più selettivo. Default 100. Se il tratto non aggancia nulla (vedi mappa), alza gradualmente.</p>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-label">Consiglio pratico</div>
+    <p>Prima di lanciare una batteria di analisi su decine di file, fai una sessione di prova con un solo .fit per calibrare parametri e verificare che i tratti agganciano correttamente. Ti eviterà di rifare tutto in blocco.</p>
+  </div>
+</section>
+
+<!-- CHAPTER 4 -->
+<section class="chapter">
+  <div class="chapter-header">
+    <div class="chapter-num">Capitolo 04</div>
+    <h2>Definire una gara e i tratti GPS</h2>
+  </div>
+  <p class="chapter-intro">Come impostare il metadata di una gara e i quattro tratti chiave su cui verrà calcolata l'analisi.</p>
+
+  <h3>Metadata gara</h3>
+  <p>Nella sezione "1. Metadata gara" scegli la gara da un elenco di preset (le cinque monumento hanno preset di partenza già configurati) o crei una nuova gara scrivendo il nome. Imposta l'anno di edizione e un "corridore fallback" (usato se non riesci a inferire il nome corridore dal filename del .fit, vedi capitolo 5).</p>
+
+  <h3>I quattro tratti</h3>
+  <p>Il tool analizza fino a <strong>quattro tratti GPS per gara</strong>. Un tratto è una regione geografica definita da due punti (start ed end) su cui si vogliono confrontare gli sforzi dei corridori. Esempi tipici:</p>
+  <ul>
+    <li>Il finale in salita del Poggio nella Milano-Sanremo</li>
+    <li>Il muro di Grammont nel Giro delle Fiandre</li>
+    <li>La foresta di Arenberg nella Parigi-Roubaix</li>
+    <li>La côte de La Redoute nella Liegi-Bastogne-Liegi</li>
+  </ul>
+
+  <h3>Come si trovano le coordinate</h3>
+  <p>Il modo più veloce è:</p>
+  <ol>
+    <li>Apri Google Maps sul tratto di interesse.</li>
+    <li>Fai click destro sul punto di inizio del tratto → si aprono le coordinate in gradi decimali (es. <code>45.673421, 8.912345</code>). Copiale.</li>
+    <li>Ripeti sul punto di fine tratto.</li>
+    <li>Nel tool, incolla latitudine e longitudine di start ed end nei rispettivi campi.</li>
+  </ol>
+
+  <div class="callout warning">
+    <div class="callout-label">Bounding box vs. traccia esatta</div>
+    <p>Il tool non usa il tratto come "linea" ma come <strong>rettangolo di delimitazione</strong> (bounding box) attorno ai due punti definiti. Tutti i record del .fit che cadono dentro questo rettangolo vengono considerati parte del tratto. Per tratti lunghi ma dritti (es. una salita rettilinea) questo funziona benissimo. Per tratti che curvano molto potresti dover restringere lo start/end o alzare la tolleranza per catturare correttamente il percorso reale del corridore.</p>
+  </div>
+
+  <h3>Nome del tratto</h3>
+  <p>Dai un nome descrittivo (es. "Poggio", "Cipressa", "Arenberg"). Questo nome comparirà in tutti i risultati, grafici ed export Excel — meglio se ha significato per te e per chi leggerà la tesi.</p>
+</section>
+
+<!-- CHAPTER 5 -->
+<section class="chapter">
+  <div class="chapter-header">
+    <div class="chapter-num">Capitolo 05</div>
+    <h2>Upload e analisi dei file .fit</h2>
+  </div>
+  <p class="chapter-intro">Come caricare uno o più file .fit e lanciare l'analisi comparativa.</p>
+
+  <h3>Convenzione di naming dei file</h3>
+  <p>Il tool infierisce automaticamente il nome del corridore dal nome del file, usando la convenzione:</p>
+  <pre>qualsiasi_prefisso__Cognome.fit</pre>
+  <p>Il pezzo dopo il doppio underscore (<code>__</code>) diventa il nome del corridore. Esempi corretti:</p>
+  <ul>
+    <li><code>sanremo2021__vanderPoel.fit</code> → corridore: <em>vanderPoel</em></li>
+    <li><code>lombardia2023__Pogacar.fit</code> → corridore: <em>Pogacar</em></li>
+    <li><code>fiandre2024__Pedersen.fit</code> → corridore: <em>Pedersen</em></li>
+  </ul>
+  <p>Se il nome del file non contiene il doppio underscore, viene usato il valore di "corridore fallback" impostato nella sezione metadata (utile quando analizzi un solo file alla volta).</p>
+
+  <h3>Upload multiplo</h3>
+  <p>Puoi caricare uno o più file in un colpo solo, trascinandoli nell'area di upload. Ogni file verrà processato in sequenza. Il tempo di elaborazione è tipicamente <strong>1-3 secondi per file</strong> di durata monumento (5-7 ore).</p>
+
+  <h3>Lancio dell'analisi</h3>
+  <p>Cliccando "Analizza tutto" il tool:</p>
+  <ol>
+    <li>Legge ogni file .fit ed estrae timestamp, potenza, coordinate GPS.</li>
+    <li>Applica la media mobile alla serie di potenza.</li>
+    <li>Per ogni tratto, filtra i record che cadono nel bounding box.</li>
+    <li>Per ogni soglia, calcola numero superamenti, secondi sopra soglia, media watt, media W/kg.</li>
+    <li>Aggrega i risultati in un DataFrame master.</li>
+    <li>Se l'auto-save è attivo, salva le analisi in archivio per corridore.</li>
+  </ol>
+
+  <div class="callout info">
+    <div class="callout-label">Formato dei risultati</div>
+    <p>Ogni riga della tabella di output rappresenta una combinazione (corridore × gara × anno × tratto × soglia W/kg). Se analizzi 4 corridori × 1 gara × 4 tratti × 10 soglie, ottieni 160 righe. È il formato "long" tipico per la statistica descrittiva in R o Python.</p>
+  </div>
+</section>
+
+<!-- CHAPTER 6 -->
+<section class="chapter">
+  <div class="chapter-header">
+    <div class="chapter-num">Capitolo 06</div>
+    <h2>La mappa GPS per la verifica delle coordinate</h2>
+  </div>
+  <p class="chapter-intro">Come usare l'anteprima cartografica per validare i tratti prima di lanciare l'analisi.</p>
+
+  <h3>Perché serve la mappa</h3>
+  <p>Il problema più comune quando si imposta un nuovo tratto è che le coordinate <strong>non agganciano</strong> i record del .fit. Le cause tipiche:</p>
+  <ul>
+    <li>Coordinate copiate con formato sbagliato (semicircles invece di gradi, o viceversa).</li>
+    <li>Latitudine e longitudine invertite.</li>
+    <li>Tolleranza GPS troppo bassa rispetto alla precisione del power meter.</li>
+    <li>Tratto messo su un pezzo di strada che i corridori non hanno effettivamente percorso quell'anno (percorso modificato).</li>
+  </ul>
+  <p>Senza la mappa dovresti lanciare l'analisi, vedere numeri strani o zero, tornare indietro e provare a indovinare cos'è sbagliato. Con la mappa questo processo diventa immediato e visivo.</p>
+
+  <h3>Come funziona</h3>
+  <p>Subito dopo aver caricato uno o più file .fit, compare l'expander <strong>"🗺️ Anteprima mappa tratti (verifica coordinate)"</strong>. Aprendolo puoi:</p>
+  <ol>
+    <li>Selezionare quale file .fit visualizzare (se ne hai caricati più).</li>
+    <li>Vedere il percorso completo della gara disegnato in <strong>blu</strong> sopra una mappa OpenStreetMap.</li>
+    <li>Vedere i tratti che hai definito evidenziati con colori diversi (rosso, arancione, verde, viola).</li>
+    <li>Vedere i cerchietti bianchi (start) e neri (end) sui GPS che hai inserito manualmente.</li>
+    <li>Consultare la tabella di aggancio: quanti punti del percorso cadono dentro il bounding box di ogni tratto.</li>
+  </ol>
+
+  <div class="figure">[ Anteprima mappa: percorso Sanremo 2021 in blu + Poggio evidenziato in rosso + cerchietti sui GPS ]<div class="caption">Figura 6.1 — Verifica visiva dell'aggancio dei tratti prima dell'analisi.</div></div>
+
+  <h3>Come reagire agli errori</h3>
+  <table>
+    <thead><tr><th>Sintomo</th><th>Causa probabile</th><th>Soluzione</th></tr></thead>
+    <tbody>
+      <tr><td>Tratto marcato ⚠️ nessun punto</td><td>Bounding box non contiene alcun record .fit</td><td>Verifica coordinate; alza la tolleranza GPS.</td></tr>
+      <tr><td>Tratto agganciato in un punto sbagliato del percorso</td><td>Lat/lon invertite o formato errato</td><td>Ricontrolla start ed end; passa dal selector "formato coordinate".</td></tr>
+      <tr><td>Tratto molto lungo che cattura decine di km</td><td>Bounding box troppo grande</td><td>Restringi i punti start/end; abbassa la tolleranza.</td></tr>
+      <tr><td>Il percorso blu non compare del tutto</td><td>Il file .fit non contiene coordinate GPS</td><td>Verifica che il power meter avesse GPS attivo; alcuni file di rullo indoor non lo hanno.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- CHAPTER 7 -->
+<section class="chapter">
+  <div class="chapter-header">
+    <div class="chapter-num">Capitolo 07</div>
+    <h2>Lettura dei risultati e dei grafici</h2>
+  </div>
+  <p class="chapter-intro">Come interpretare il DataFrame master e come sfruttare i quattro grafici predefiniti per la tua tesi.</p>
+
+  <h3>La tabella master</h3>
+  <p>Dopo l'analisi, la sezione "4. Risultati" mostra un DataFrame con le seguenti colonne:</p>
+
+  <table>
+    <thead><tr><th>Colonna</th><th>Significato</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">corridore</td><td>Nome corridore inferito dal filename</td></tr>
+      <tr><td class="mono">gara</td><td>Nome gara come inserito in metadata</td></tr>
+      <tr><td class="mono">anno</td><td>Anno edizione</td></tr>
+      <tr><td class="mono">tratto</td><td>Nome del tratto</td></tr>
+      <tr><td class="mono">soglia_wkg</td><td>Soglia W/kg per cui è calcolata la riga</td></tr>
+      <tr><td class="mono">n_superamenti</td><td>Numero blocchi consecutivi sopra soglia (filtrati per durata minima se impostata)</td></tr>
+      <tr><td class="mono">secondi_sopra</td><td>Secondi totali sopra soglia nel tratto</td></tr>
+      <tr><td class="mono">media_potenza_w</td><td>Media watt sul tratto (potenza rolling)</td></tr>
+      <tr><td class="mono">media_wkg</td><td>Media W/kg sul tratto</td></tr>
+      <tr><td class="mono">durata_tratto_s</td><td>Durata totale del tratto per quel corridore</td></tr>
+      <tr><td class="mono">campioni_tratto</td><td>Numero record .fit che cadono nel bounding box</td></tr>
+    </tbody>
+  </table>
+
+  <h3>I quattro grafici predefiniti</h3>
+  <p>Sotto la tabella trovi la sezione "5. Grafici" con quattro tab.</p>
+
+  <div class="step-block">
+    <div class="step-num">Grafico 01</div>
+    <h4>Superamenti per soglia</h4>
+    <p>Numero di superamenti (una serie per tratto) al variare della soglia W/kg, per il corridore selezionato in una gara-anno specifica. Utile per vedere come si distribuiscono gli sforzi di un corridore lungo i tratti chiave della gara. Formato line chart + bar chart.</p>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num">Grafico 02</div>
+    <h4>Secondi sopra soglia</h4>
+    <p>Area chart cumulato: secondi sopra soglia per tratto, al variare della soglia W/kg. Immediato per capire dove il corridore ha lavorato di più (tratto e intensità). Formato area chart impilato.</p>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num">Grafico 03</div>
+    <h4>Confronto tra corridori</h4>
+    <p>Bar chart che confronta corridori diversi sulla stessa soglia W/kg (metrica a scelta: superamenti, secondi, media W/kg). Formato tabellare comparativo pronto per essere incollato nel capitolo Risultati.</p>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num">Grafico 04</div>
+    <h4>Confronto tra tratti</h4>
+    <p>Line chart che mostra la media (di tutti i corridori) di una metrica, per ogni tratto, al variare della soglia. Utile per la statistica descrittiva aggregata: quali tratti sono mediamente più esigenti?</p>
+  </div>
+
+  <h3>Export Excel</h3>
+  <p>Il pulsante "⬇️ Scarica Excel" genera un file <code>.xlsx</code> con una sheet "master" contenente tutti i dati, più una sheet dedicata per ogni combinazione (corridore × gara × anno). Puoi aprire questo file direttamente in Excel, Numbers o R/Python per l'analisi statistica successiva.</p>
+</section>
+
+<!-- CHAPTER 8 -->
+<section class="chapter">
+  <div class="chapter-header">
+    <div class="chapter-num">Capitolo 08</div>
+    <h2>Archivio persistente e cronologia</h2>
+  </div>
+  <p class="chapter-intro">Come funziona il salvataggio automatico e come recuperare analisi fatte in passato.</p>
+
+  <h3>Come funziona l'archivio</h3>
+  <p>Ogni analisi che lanci può essere salvata automaticamente in un archivio persistente, associato al tuo account. L'archivio è organizzato per corridore: ogni corridore ha un proprio file JSON che contiene la cronologia di tutte le analisi in cui compare.</p>
+
+  <p>Nella sidebar puoi attivare/disattivare l'opzione <strong>"Salva automaticamente le analisi in archivio"</strong>. Quando è attiva, ogni volta che lanci "Analizza tutto" i risultati vengono aggiunti all'archivio dei corridori coinvolti.</p>
+
+  <h3>Consultare la cronologia</h3>
+  <p>Nella sezione "📚 Cronologia archivio" trovi un selectbox con l'elenco di tutti i corridori salvati. Selezionandone uno vedi tutte le analisi effettuate su quel corridore, ordinate per data. Ogni analisi è espandibile per vedere il DataFrame completo, scaricabile in CSV, o eliminabile.</p>
+
+  <div class="callout info">
+    <div class="callout-label">Persistenza tra sessioni</div>
+    <p>L'archivio è persistente tra sessioni: puoi chiudere il browser, tornare dopo settimane, e ritrovi tutte le analisi. I dati sono salvati in un repository dedicato al tuo account con token di accesso privato.</p>
+  </div>
+
+  <h3>Buone pratiche</h3>
+  <ul>
+    <li><strong>Nome corridore standard</strong>: usa sempre la stessa forma (es. "Pogacar", non "Pogačar" con caratteri speciali) per far ricadere tutte le analisi sotto lo stesso corridore in archivio.</li>
+    <li><strong>Note interne</strong>: sfrutta il campo "note" per tracciare l'occasione della analisi (es. "prima passata con tolleranza 100"), utile per confrontare parametri diversi.</li>
+    <li><strong>Backup periodico</strong>: scarica periodicamente i CSV delle analisi importanti come backup locale offline.</li>
+  </ul>
+</section>
+
+<!-- CHAPTER 9 -->
+<section class="chapter">
+  <div class="chapter-header">
+    <div class="chapter-num">Capitolo 09</div>
+    <h2>Interpretazione fisiologica dei risultati</h2>
+  </div>
+  <p class="chapter-intro">Cosa significano i numeri che il tool restituisce, dal punto di vista dell'esercizio fisico.</p>
+
+  <h3>Media W/kg del tratto</h3>
+  <p>Il valore <code>media_wkg</code> rappresenta l'intensità media dello sforzo su quel tratto. Per contestualizzare:</p>
+  <ul>
+    <li><strong>&lt; 3.0 W/kg</strong>: tratto in gruppo, andatura di trasferimento, ricovero attivo.</li>
+    <li><strong>3.0 - 4.0 W/kg</strong>: andatura sostenuta, tipica di tratti pianeggianti in gara.</li>
+    <li><strong>4.0 - 5.0 W/kg</strong>: sforzo elevato, tipico dei tratti in fuga o in salita moderata.</li>
+    <li><strong>5.0 - 6.0 W/kg</strong>: sforzo di soglia lattacida, sostenibile per 30-60 minuti da un pro.</li>
+    <li><strong>&gt; 6.0 W/kg</strong>: sforzo sopra-soglia, sostenibile per pochi minuti.</li>
+  </ul>
+
+  <h3>Secondi sopra soglia</h3>
+  <p>Il valore <code>secondi_sopra</code> per una data soglia (es. 6 W/kg) misura <strong>quanto tempo il corridore ha passato in quella zona di intensità</strong> nel tratto. È la metrica principale della letteratura tempo-in-zona e ha una correlazione documentata con l'esito della gara: chi vince tipicamente sta più tempo sopra le soglie alte nei tratti chiave.</p>
+
+  <h3>Numero di superamenti</h3>
+  <p>Il valore <code>n_superamenti</code> è il numero di episodi discreti in cui il corridore è entrato in una zona di intensità. Un corridore con 100 superamenti brevi di 5 W/kg ha un profilo diverso da un corridore con 5 superamenti lunghi di 5 W/kg: il primo è più "intermittente" (tipico dei classicomani), il secondo più "steady" (tipico dei rouleurs). L'interpretazione va sempre incrociata con <code>secondi_sopra</code>.</p>
+
+  <div class="callout info">
+    <div class="callout-label">Suggerimento per la tesi</div>
+    <p>Nella discussione dei risultati, non limitarti a citare i numeri assoluti. Contestualizza sempre: <em>«Il corridore X ha passato 342 secondi sopra 6 W/kg nel Poggio, contro i 218 secondi del corridore Y. Considerando che il Poggio dura circa 6 minuti in gara, questo significa che X ha lavorato in zona VO₂max per oltre il 90% dell'ascesa, contro il 60% di Y — una differenza compatibile con la migliore prestazione finale di X»</em>. È così che i numeri diventano una tesi.</p>
+  </div>
+</section>
+
+<!-- CHAPTER 10 -->
+<section class="chapter">
+  <div class="chapter-header">
+    <div class="chapter-num">Capitolo 10</div>
+    <h2>Protocollo di analisi per una tesi</h2>
+  </div>
+  <p class="chapter-intro">Un workflow strutturato in sette fasi per portare una tesi sperimentale dal disegno alla discussione.</p>
+
+  <h3>Fase 1 — Definizione del disegno sperimentale</h3>
+  <p>Prima di aprire il tool, definisci con chiarezza:</p>
+  <ul>
+    <li><strong>Domanda di ricerca</strong> (es. «esiste una differenza significativa nel tempo speso sopra 5 W/kg nel finale di Sanremo tra vincitori e primi cinque?»)</li>
+    <li><strong>Campione</strong>: quanti corridori, criterio di selezione (top 10 arrivo? Ruolo specifico? Team?), gare, edizioni.</li>
+    <li><strong>Tratti di interesse</strong>: quali sezioni della gara sono metodologicamente rilevanti per la domanda.</li>
+    <li><strong>Soglie da analizzare</strong>: default 3.5-8.0 con step 0.5, o range custom giustificato in tesi.</li>
+    <li><strong>Statistica</strong>: descrittiva (media, mediana, dev.std, min, max) + eventuali test inferenziali (t-test, ANOVA) se il campione lo consente.</li>
+  </ul>
+
+  <h3>Fase 2 — Raccolta dei file .fit</h3>
+  <p>I file .fit dei corridori pro non sono sempre pubblici. Fonti possibili:</p>
+  <ul>
+    <li>Strava (attività pubbliche → download .fit disponibile)</li>
+    <li>Contatto diretto con il corridore o il team</li>
+    <li>Piattaforme come intervals.icu (se il corridore ha reso pubblico il profilo)</li>
+    <li>Dataset condivisi da colleghi di ricerca (con permesso)</li>
+  </ul>
+
+  <h3>Fase 3 — Setup del tool</h3>
+  <ol>
+    <li>Imposta peso corridore (se analizzi corridori diversi, fai sessioni separate)</li>
+    <li>Imposta media mobile (default 3s ok per la maggior parte dei casi)</li>
+    <li>Definisci le soglie</li>
+    <li>Crea la gara (o seleziona il preset)</li>
+    <li>Imposta i 4 tratti con coordinate GPS accurate</li>
+  </ol>
+
+  <h3>Fase 4 — Prova con un solo corridore</h3>
+  <p>Prima di analizzare tutti i file, fai una prova con un solo corridore e apri la mappa GPS: verifica che tutti i tratti agganciano correttamente il percorso. Correggi tolleranza o coordinate se serve. <strong>Non saltare questa fase</strong> — un errore qui si propaga a tutto il dataset.</p>
+
+  <h3>Fase 5 — Analisi completa</h3>
+  <p>Carica tutti i file .fit con la convenzione di naming <code>prefisso__Cognome.fit</code>. Lancia "Analizza tutto". Verifica che ogni file abbia dato risultati validi (nessun warning). Scarica l'Excel completo.</p>
+
+  <h3>Fase 6 — Statistica descrittiva</h3>
+  <p>In Excel, R o Python: calcola per ogni combinazione tratto × soglia le statistiche del gruppo (media, mediana, dev.std, min, max). Genera boxplot per soglia, grafici comparativi. Questo materiale va nel capitolo Risultati della tesi.</p>
+
+  <h3>Fase 7 — Discussione</h3>
+  <p>Interpreta i numeri alla luce della fisiologia dell'esercizio (vedi capitolo 9) e della letteratura di riferimento (vedi bibliografia). Non descrivere solo i numeri — <strong>racconta cosa significano</strong> per la prestazione, per la strategia di gara, per la preparazione atletica.</p>
+
+  <div class="callout warning">
+    <div class="callout-label">Riproducibilità</div>
+    <p>Nel capitolo Materiali e Metodi della tesi documenta sempre: versione del tool usata, parametri (peso, media mobile, tolleranza GPS, durata min superamento), coordinate esatte dei tratti, criteri di selezione dei corridori. Questo permette a chiunque di replicare la tua analisi ed è un requisito minimo per la validità scientifica.</p>
+  </div>
+</section>
+
+<!-- CHAPTER 11 -->
+<section class="chapter">
+  <div class="chapter-header">
+    <div class="chapter-num">Capitolo 11</div>
+    <h2>Troubleshooting e FAQ tecniche</h2>
+  </div>
+
+  <h3>«L'app dice Nessun record valido nel file»</h3>
+  <p>Il file .fit potrebbe essere corrotto o non contenere record di tipo "record" (il messaggio principale che porta timestamp/potenza/GPS). Verifica il file aprendolo con un tool esterno (es. FIT File Viewer di Garmin). Se apre normalmente altrove ma non nel tool, aprire un ticket via email.</p>
+
+  <h3>«Il tratto non aggancia nulla nonostante la mappa mostri il percorso»</h3>
+  <p>Nell'ordine: (1) verifica formato coordinate (gradi decimali vs semicircles), (2) verifica ordine lat/lon, (3) alza tolleranza GPS a 500-1000, (4) allarga i punti start/end per catturare un'area più ampia.</p>
+
+  <h3>«I secondi sopra soglia sembrano troppo alti»</h3>
+  <p>Verifica il valore della media mobile: se è impostato a 1 secondo stai contando tutti i picchi istantanei, incluso rumore strumentale. Alza a 3-5 secondi per una lettura più fisiologica.</p>
+
+  <h3>«I W/kg sembrano bassi rispetto a quelli attesi»</h3>
+  <p>Verifica il peso corridore impostato. Se stai analizzando un corridore da 66 kg con peso di default 72 kg, i W/kg risultano circa il 10% più bassi del reale.</p>
+
+  <h3>«L'analisi impiega molto più di 30 secondi»</h3>
+  <p>Può succedere con file .fit di durata &gt; 8 ore o con dataset di decine di file caricati insieme. Considera di dividere il batch in sessioni più piccole.</p>
+
+  <h3>«Ho perso le credenziali»</h3>
+  <p>Scrivi all'indirizzo di supporto indicato in fondo al manuale, ti verranno rigenerate entro 24h lavorative.</p>
+
+  <h3>«Posso analizzare i miei allenamenti personali?»</h3>
+  <p>Sì, tecnicamente il tool accetta qualsiasi file .fit. Ma per analisi individuali di training sono più adatti Golden Cheetah, WKO5, TrainingPeaks — hanno metriche di carico specifiche (TSS, IF, CTL) che il tool volutamente non calcola.</p>
+</section>
+
+<!-- CHAPTER 12 -->
+<section class="chapter biblio">
+  <div class="chapter-header">
+    <div class="chapter-num">Capitolo 12</div>
+    <h2>Bibliografia</h2>
+  </div>
+  <p class="chapter-intro">Fonti primarie per il metodo scientifico usato dal tool. Da citare nel capitolo Materiali e Metodi della tesi.</p>
+
+  <ol>
+    <li><strong>Allen H., Coggan A. R., McGregor S.</strong> (2019). <em>Training and Racing with a Power Meter</em>. 3rd Edition. VeloPress, Boulder CO. — Testo di riferimento canonico sulla potenza nel ciclismo. Cap. 3-4 sul Training Stress Score e sul metodo tempo-in-zona.</li>
+
+    <li><strong>Vogt S., Heinrich L., Schumacher Y. O., Blum A., Roecker K., Dickhuth H. H., Schmid A.</strong> (2007). Power output during stage racing in professional road cycling. <em>Medicine and Science in Sports and Exercise</em>, 38(1), 147-151. — Studio di riferimento sui carichi di lavoro nel professionismo su strada.</li>
+
+    <li><strong>Sanders D., van Erp T., de Koning J. J.</strong> (2019). Intensity and load characteristics of professional road cycling: differences between men's and women's races. <em>International Journal of Sports Physiology and Performance</em>, 14(3), 296-302. — Applicazioni recenti dell'analisi tempo-in-zona su gare pro maschili e femminili.</li>
+
+    <li><strong>Padilla S., Mujika I., Orbañanos J., Angulo F.</strong> (2000). Exercise intensity during competition time trials in professional road cycling. <em>Medicine and Science in Sports and Exercise</em>, 32(4), 850-856. — Studio classico sull'intensità nelle prove a cronometro pro.</li>
+
+    <li><strong>van Erp T., Sanders D., de Koning J. J.</strong> (2019). Training characteristics of male and female professional road cyclists: a 4-year retrospective analysis. <em>International Journal of Sports Physiology and Performance</em>, 15(4), 534-540. — Analisi longitudinale dei carichi di allenamento.</li>
+
+    <li><strong>Coggan A. R.</strong> (2003). Training and racing using a power meter: an introduction. <em>Peaks Coaching Group Whitepaper</em>. — Introduzione originale alla metodologia della potenza normalizzata e delle zone.</li>
+
+    <li><strong>Pinot J., Grappe F.</strong> (2011). The record power profile to assess performance in elite cyclists. <em>International Journal of Sports Medicine</em>, 32(11), 839-844. — Metodologia per la costruzione del Power Profile.</li>
+
+    <li><strong>Passfield L., Hopker J. G., Jobson S., Friel D., Zabala M.</strong> (2017). Knowledge is power: issues of measuring training and performance in cycling. <em>Journal of Sports Sciences</em>, 35(14), 1426-1434. — Rassegna metodologica sulle metriche di allenamento e performance.</li>
+  </ol>
+
+  <div class="callout info" style="margin-top: 2rem;">
+    <div class="callout-label">Come citare il tool nella tesi</div>
+    <p>Nel capitolo Materiali e Metodi puoi citare FIT Analyzer così:</p>
+    <p style="margin-top: 0.5rem; font-family: 'JetBrains Mono', monospace; font-size: 9pt; background: #ede8dc; padding: 0.75rem; border-radius: 3px;">L'analisi dei file .fit è stata effettuata tramite FIT Analyzer (v. 1.0, Pasian M., 2026), applicando la convenzione count-of-samples secondo Allen &amp; Coggan (2019). I parametri utilizzati sono: media mobile [N] secondi, tolleranza GPS [N] semicircles, soglie W/kg da [min] a [max] con step [step].</p>
+  </div>
+
+  <p style="margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #d8d1bf; font-size: 9pt; color: #8a8375; text-align: center;">Fine del manuale · Per supporto tecnico e domande metodologiche: martinapasianbot@gmail.com · Rispondo in 24 ore lavorative.</p>
+</section>
+
+</body>
+</html>

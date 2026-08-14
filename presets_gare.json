@@ -1,0 +1,47 @@
+{
+  "Milano-Sanremo": {
+    "note": "Coordinate dei 4 tratti da inserire — placeholder. Gaia deve confermare o correggere.",
+    "tratti": [
+      {"nome": "Cipressa", "lat_start": 43.845, "lat_end": 43.845, "long_start": 7.985, "long_end": 7.978},
+      {"nome": "Poggio", "lat_start": 43.820, "lat_end": 43.820, "long_start": 7.792, "long_end": 7.783},
+      {"nome": "Discesa Poggio", "lat_start": 43.820, "lat_end": 43.822, "long_start": 7.783, "long_end": 7.775},
+      {"nome": "Sprint via Roma", "lat_start": 43.815, "lat_end": 43.816, "long_start": 7.775, "long_end": 7.775}
+    ]
+  },
+  "Giro delle Fiandre": {
+    "note": "Placeholder — Oude Kwaremont, Paterberg, ecc.",
+    "tratti": [
+      {"nome": "Oude Kwaremont (ultimo passaggio)", "lat_start": 50.774, "lat_end": 50.778, "long_start": 3.612, "long_end": 3.626},
+      {"nome": "Paterberg", "lat_start": 50.773, "lat_end": 50.776, "long_start": 3.617, "long_end": 3.628},
+      {"nome": "Koppenberg", "lat_start": 50.837, "lat_end": 50.840, "long_start": 3.688, "long_end": 3.700},
+      {"nome": "Kruisberg", "lat_start": 50.831, "lat_end": 50.834, "long_start": 3.612, "long_end": 3.626}
+    ]
+  },
+  "Parigi-Roubaix": {
+    "note": "Placeholder — settori pavé principali.",
+    "tratti": [
+      {"nome": "Trouée d'Arenberg", "lat_start": 50.443, "lat_end": 50.457, "long_start": 3.415, "long_end": 3.420},
+      {"nome": "Mons-en-Pévèle", "lat_start": 50.514, "lat_end": 50.522, "long_start": 3.099, "long_end": 3.107},
+      {"nome": "Carrefour de l'Arbre", "lat_start": 50.601, "lat_end": 50.607, "long_start": 3.150, "long_end": 3.163},
+      {"nome": "Roubaix Vélodrome", "lat_start": 50.681, "lat_end": 50.683, "long_start": 3.176, "long_end": 3.178}
+    ]
+  },
+  "Liegi-Bastogne-Liegi": {
+    "note": "Placeholder — côtes principali.",
+    "tratti": [
+      {"nome": "Côte de Stockeu", "lat_start": 50.386, "lat_end": 50.392, "long_start": 5.941, "long_end": 5.945},
+      {"nome": "Côte de la Redoute", "lat_start": 50.514, "lat_end": 50.518, "long_start": 5.712, "long_end": 5.720},
+      {"nome": "Côte de la Roche-aux-Faucons", "lat_start": 50.547, "lat_end": 50.552, "long_start": 5.622, "long_end": 5.628},
+      {"nome": "Arrivo Liegi", "lat_start": 50.632, "lat_end": 50.640, "long_start": 5.573, "long_end": 5.580}
+    ]
+  },
+  "Giro di Lombardia": {
+    "note": "Placeholder — Ghisallo, Muro di Sormano ecc.",
+    "tratti": [
+      {"nome": "Madonna del Ghisallo", "lat_start": 45.910, "lat_end": 45.920, "long_start": 9.256, "long_end": 9.270},
+      {"nome": "Muro di Sormano", "lat_start": 45.883, "lat_end": 45.891, "long_start": 9.234, "long_end": 9.245},
+      {"nome": "Civiglio", "lat_start": 45.796, "lat_end": 45.810, "long_start": 9.098, "long_end": 9.112},
+      {"nome": "San Fermo della Battaglia", "lat_start": 45.797, "lat_end": 45.808, "long_start": 9.055, "long_end": 9.075}
+    ]
+  }
+}

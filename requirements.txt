@@ -1,0 +1,8 @@
+streamlit>=1.60
+fitparse>=1.2
+pandas>=2.0
+numpy>=1.24
+openpyxl>=3.1
+requests>=2.31
+folium>=0.15
+streamlit-folium>=0.20
