@@ -254,9 +254,23 @@ for i, tab in enumerate(tabs):
             la_s, la_e = int(lat_s), int(lat_e)
             lo_s, lo_e = int(lon_s), int(lon_e)
 
+        # Se più tratti hanno le stesse coordinate, li interpretiamo come
+        # passaggi/lap successivi sulla stessa porzione di percorso.
+        same_before = sum(
+            1 for prev in tratti
+            if (
+                prev.lat_start == la_s
+                and prev.lat_end == la_e
+                and prev.long_start == lo_s
+                and prev.long_end == lo_e
+            )
+        )
+        passaggio = same_before + 1
+
         tratti.append(Tratto(
             nome=nome, lat_start=la_s, lat_end=la_e,
             long_start=lo_s, long_end=lo_e, gps_tolerance=int(tol_semi),
+            passaggio=passaggio,
         ))
 
 # ────────────────────────── UPLOAD & ANALISI ──────────────────────────
@@ -402,7 +416,7 @@ if uploads:
 
                         opacity=0.9,
 
-                        tooltip=f"{t.nome} — {len(matched)} campioni START → END",
+                        tooltip=f"{t.nome} — passaggio {t.passaggio} — {len(matched)} campioni START → END",
 
                     ).add_to(fmap)
 
@@ -514,13 +528,27 @@ if uploads:
 
                 n = len(points_in_tratto(route_df, t))
 
+                matched = points_in_tratto(route_df, t)
+                if not matched.empty:
+                    ora_start = matched["timestamp"].iloc[0].strftime("%H:%M:%S")
+                    ora_end = matched["timestamp"].iloc[-1].strftime("%H:%M:%S")
+                else:
+                    ora_start = "—"
+                    ora_end = "—"
+
                 riepilogo.append({
 
                     "tratto": t.nome,
 
+                    "passaggio/lap": t.passaggio,
+
                     "campioni nel tratto": n,
 
-                    "stato": "✅" if n > 0 else "⚠️ tratto non trovato",
+                    "inizio": ora_start,
+
+                    "fine": ora_end,
+
+                    "stato": "✅" if n > 0 else "⚠️ passaggio non trovato",
 
                 })
 
@@ -708,3 +736,4 @@ with st.expander("📖 Guida di utilizzo (clicca per aprire)", expanded=False):
             st.markdown(f.read())
     except FileNotFoundError:
         st.info("Guida non trovata (file guida.md).")
+
